@@ -44,6 +44,6 @@ Configuration
 
 Demo
 -----
-![Screenshot](docs/images/helpdesk com home example.png)
+![Screenshot](docs/images/helpdesk-com-home-example.png)
 -----
-![Screenshot](docs/images/helpdesk com ticket example.png)
+![Screenshot](docs/images/helpdesk-com-ticket-example.png)
