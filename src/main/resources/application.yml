@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    initialize: true
+    url: ${JDBC_DATABASE_URL}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        use_sql_comments: true
+        format_sql: true
+        type: trace
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+  thymeleaf:
+    cache: false
+management:
+  security:
+    enabled: false
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: INFO
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

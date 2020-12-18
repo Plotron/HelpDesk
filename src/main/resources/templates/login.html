@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" data-layout-decorator="layout-plain">
+<head>
+    <title>HelpDesk.com - Log In!</title>
+</head>
+<body>
+
+<section data-layout-fragment="content">
+    <div class="row justify-content-center">
+        <div class="card-header p-b-0">
+            <h5 class="card-title">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                Log In
+            </h5>
+        </div>
+        <div class="card">
+            <div class="card-block">
+                <form th:action="@{/login}" method="post">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger">
+                            Invalid username and/or password.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="username" id="username" class="form-control input-lg"
+                               placeholder="Username" required="true" autofocus="true"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" id="password" class="form-control input-lg"
+                               placeholder="Password" required="true"/>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-5">
+                            <button type="submit" class="btn btn-lg btn-fill btn-warning btn-block">
+                                Login
+                            </button>
+                        </div>
+                        <div class="col-md-5">
+                            <a href="/signup" class="btn btn-lg btn-fill btn-success">
+                                Sign-Up
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

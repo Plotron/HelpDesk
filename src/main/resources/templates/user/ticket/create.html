@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorator="layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>HelpDesk.com - Open New Support Ticket</title>
+</head>
+<body>
+<div data-layout-fragment="breadcrumbs">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/user/tickets">My Support Tickets</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+            New Support Ticket
+        </li>
+    </ol>
+</div>
+<div data-layout-fragment="main-panel">
+    <div class="content">
+        <div class="card">
+            <div class="card-header p-b-0">
+                <h5 class="card-title">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <i class="fa fa-ticket" aria-hidden="true"></i>
+                    Open a New Support Ticket
+                </h5>
+            </div>
+            <div class="card-block">
+                <form th:action="@{/user/ticket/create}" method="post" data-th-object="${formData}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" th:field="*{title}" id="title" name="title" placeholder="Ticket Title" required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="8" th:field="*{message}" id="message" name="message" placeholder="How can we help you?" required="true"></textarea>
+                    </div>
+                    <hr/>
+                    <button type="submit" class="btn btn-primary">Submit Ticket</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

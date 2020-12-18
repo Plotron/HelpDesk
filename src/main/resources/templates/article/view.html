@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorator="layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title data-th-text="'HelpDesk.com - ' + ${object.title}"></title>
+</head>
+<body>
+<div data-layout-fragment="breadcrumbs">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/article/list">Articles</a></li>
+        <li class="breadcrumb-item active" aria-current="page" data-th-text="${object.title}"></li>
+    </ol>
+</div>
+<div data-layout-fragment="main-panel">
+    <!-- Alert -->
+    <div class="content" data-th-object="${object}">
+        <h1>
+            <th-block data-th-text="*{title}"></th-block>
+        </h1>
+        <p class="text-muted">
+            <th-block
+                    data-th-text="'Created ' + *{#temporals.format(creationDate, 'dd/MM/yyyy HH:mm')} + ', latest version ' + *{#temporals.format(lastModifiedDate, 'dd/MM/yyyy HH:mm')}"></th-block>
+            <span data-sec-authorize="hasRole('ROLE_HELPDESK')" data-th-text=" 'by ' + *{lastModifiedBy.username}"></span>
+            <span class="pull-right">
+            <th-block data-th-each="tag: *{tags}">
+                <span class="tag tag-default" data-th-text="${tag}">keyword</span>
+            </th-block>
+        </span>
+        <hr/>
+        </p>
+        <th-block data-sec-authorize="hasRole('ROLE_HELPDESK')">
+            <a href="#" data-th-href="@{/article/delete/{id}/(id=*{id})}" class="btn btn-danger">
+                Delete
+            </a>
+            <a href="#" data-th-href="@{/article/edit/{id}/(id=*{id})}" class="btn btn-primary">
+                Edit
+            </a>
+            <hr/>
+        </th-block>
+        <p data-th-text="*{content}">
+        </p>
+    </div>
+</div>
+</body>
+</html>

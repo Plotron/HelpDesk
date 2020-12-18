@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <div data-th-fragment="size(objectsList)">
+        <span class="dropdown" data-th-with="currentUrl=(${@currentUrlWithoutParams2.apply('size', 'page')})">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdown_size" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-th-text="|Show ${objectsList.size} elements|"></button>
+            <div class="dropdown-menu" aria-labelledby="dropdown_size">
+                <a data-th-href="@{${currentUrl}(size=5)}" class="dropdown-item" type="button">Show 5 elements</a>
+                <a data-th-href="@{${currentUrl}(size=10)}" class="dropdown-item" type="button">Show 10 elements</a>
+                <a data-th-href="@{${currentUrl}(size=30)}" class="dropdown-item" type="button">Show 30 elements</a>
+                <a data-th-href="@{${currentUrl}(size=50)}" class="dropdown-item" type="button">Show 50 elements</a>
+                <a data-th-href="@{${currentUrl}(size=100)}" class="dropdown-item" type="button">Show 100 elements</a>
+            </div>
+        </span>
+    </div>
+
+    <div data-th-fragment="pager(objectsList)">
+        <nav data-th-with="currentUrl=(${@currentUrlWithoutParam.apply('page')})">
+            <ul class="">
+                <li class="page-item" data-th-class="${objectsList.hasPrevious()}?'disabled':''">
+                    <span data-th-if='${not objectsList.hasPrevious()}' class="page-link">&laquo;</span>
+                    <a data-th-if='${objectsList.hasPrevious()}' data-th-href='@{${currentUrl}(page=${objectsList.number-1})}' title='Previous page' class="page-link">&laquo;</a>
+                </li>
+                <li data-th-each="pageNo : ${#numbers.sequence(0, objectsList.totalPages - 1)}" class="page-item" data-th-classappend="${objectsList.number eq pageNo}? 'active' : ''">
+                    <span data-th-if="${objectsList.number eq pageNo}" class="page-link">
+                        <th-block data-th-text="${pageNo + 1}"></th-block>
+                    </span>
+                    <a data-th-if="${not (objectsList.number eq pageNo)}" data-th-href="@{${currentUrl}(page=${pageNo})}" class="page-link">
+                        <th-block data-th-text="${pageNo + 1}"></th-block>
+                    </a>
+                </li>
+                <li class="page-item" data-th-class="${objectsList.hasNext()}?'disabled':''">
+                    <span data-th-if='${not objectsList.hasNext()}' class="page-link">&raquo;</span>
+                    <a data-th-if='${objectsList.hasNext()}' data-th-href='@{${currentUrl}(page=${objectsList.number+1})}' title='Previous page' class="page-link">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div data-th-fragment="filter-button">
+        <a class="btn btn-default" data-toggle="collapse" href="#filters" role="button" aria-expanded="false" aria-controls="filters">
+            <th-block data-th-include="icons :: filter"></th-block>
+            Filters
+        </a>
+    </div>
+</body>
+</html>

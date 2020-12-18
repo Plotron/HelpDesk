@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorator="layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title data-th-text="'HelpDesk.com - Support Ticket - ' + ${ticket.title}"></title>
+</head>
+<body>
+
+<div data-layout-fragment="breadcrumbs">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/user/tickets">My Support Tickets</a></li>
+        <li class="breadcrumb-item active" aria-current="page" data-th-text="${ticket.title}"></li>
+    </ol>
+</div>
+<div data-layout-fragment="main-panel">
+    <!-- Alert -->
+
+    <div class="content">
+        <th-block data-th-include="/user/ticket/partial/single-entry-full-view"></th-block>
+    </div>
+</div>
+</body>
+</html>

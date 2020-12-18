@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorator="layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title data-th-text="'HelpDesk.com - Support Ticket - close ' + ${object.title}"></title>
+</head>
+<body>
+<div data-layout-fragment="breadcrumbs">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/user/tickets">My Support Tickets</a></li>
+        <li class="breadcrumb-item"> <a href="#" data-th-href="@{/user/ticket/view/{id}/(id=${object.id})}" data-th-text="${object.title}"></a></li>
+        <li class="breadcrumb-item active" aria-current="page">Close?</li>
+    </ol>
+</div>
+
+<div data-layout-fragment="main-panel">
+    <div class="content" data-th-object="${object}">
+        <div class="card">
+            <div class="card-header p-b-0">
+                <h5 class="card-title">
+                    Close Support Ticket
+                </h5>
+            </div>
+            <div class="card-block">
+                <div class="card-body">
+                    <form action="" data-th-action="@{/user/ticket/close/{id}/(id=${object.id})}" method="post">
+                        <p data-th-text="|Are you sure you want to close the support ticket &quot;*{title}&quot;?|"></p>
+                        <button class="btn btn-danger" type="submit">Confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<h2><a href="#" data-th-href="@{/article/view/{id}/(id=*{id})}" data-th-text="*{title}">
+</a></h2>
+<p data-th-text="*{#strings.abbreviate(content,356)}"></p>
+<p>
+    <a href="#" data-th-href="@{/article/view/{id}/(id=*{id})}" class="btn btn-info">
+        Read More
+    </a>
+</p>
+<p class="pull-right">
+    <th-block data-th-each="tag: *{tags}">
+        <span class="tag tag-default" data-th-text="${tag}">keyword</span>
+    </th-block>
+</p>
+<ul class="list-inline">
+    <li class="list-inline-item"><a href="#"
+                                    data-th-text="*{#temporals.format(creationDate, 'dd/MM/yyyy HH:mm')}"></a>
+    </li>
+</ul>
+<hr/>
+

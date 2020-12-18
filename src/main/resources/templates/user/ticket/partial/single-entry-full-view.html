@@ -1,0 +1,56 @@
+<div class="card">
+    <div class="card-header p-b-0">
+        <h5 class="card-title" data-th-object="${ticket}" data-th-text="*{title}"></h5>
+    </div>
+    <div class="card-block" data-th-object="${ticket}">
+        <table class="table">
+            <tbody>
+            <tr>
+                <td><b>Opened</b></td>
+                <td data-th-text="*{#temporals.format(creationDate, 'dd/MM/yyyy HH:mm')}">
+                </td>
+            </tr>
+            <tr>
+                <td><b>Status</b></td>
+                <td>
+                    <span data-th-text="*{{status}} + ' '"></span>
+                    <span class="text-muted"
+                          data-th-text="'(last change by ' + *{{lastStatusChangeBy}} + ' on ' + *{#temporals.format(lastStatusChangeDate, 'dd/MM/yyyy HH:mm')} + ')'"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <hr/>
+        <th-block data-th-switch="*{status}">
+            <th-block data-th-case="*{Status.NEW}">
+                <a href="#" data-th-href="@{/user/ticket/close/{id}/(id=*{id})}" class="btn btn-danger">
+                    Close Ticket
+                </a>
+                <a href="#" data-th-href="@{/user/ticket/add-message/{id}/(id=*{id})}" class="btn btn-primary">
+                    New Message
+                </a>
+            </th-block>
+            <th-block data-th-case="*{Status.OPEN}">
+                <a href="#" data-th-href="@{/user/ticket/close/{id}/(id=*{id})}" class="btn btn-danger">
+                    Close Ticket
+                </a>
+                <a href="#" data-th-href="@{/user/ticket/add-message/{id}/(id=*{id})}" class="btn btn-primary">
+                    New Message
+                </a>
+            </th-block>
+        </th-block>
+        <hr/>
+        <h6><b>Message History</b></h6>
+        <div class="card">
+            <th-block data-th-each="message: *{messages}">
+                <div class="card-header p-b-0">
+                    <span class="card-title"
+                          data-th-text="${{message.user}} + ' (' + ${#temporals.format(message.creationDate, 'dd/MM/yyyy HH:mm') + ')'}"></span>
+                </div>
+                <div class="card-block">
+                    <p data-th-text="${message.content}"></p>
+                </div>
+            </th-block>
+        </div>
+    </div>
+</div>

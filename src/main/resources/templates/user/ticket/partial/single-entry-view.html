@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="card-header p-b-0">
+        <a href="#" data-th-href="@{/user/ticket/view/{id}/(id=*{id})}">
+            <h5 class="card-title" data-th-object="${ticket}" data-th-text="*{title}"></h5>
+        </a>
+    </div>
+    <div class="card-block" data-th-object="${ticket}">
+        <table class="table">
+            <tbody>
+            <tr>
+                <td><b>Opened</b></td>
+                <td data-th-text="*{#temporals.format(creationDate, 'dd/MM/yyyy HH:mm')}">
+                </td>
+            </tr>
+            <tr>
+                <td><b>Status</b></td>
+                <td>
+                    <span data-th-text="*{{status}} + ' '"></span>
+                    <span class="text-muted" data-th-text="'(last change by ' + *{{lastStatusChangeBy}} + ' on ' + *{#temporals.format(lastStatusChangeDate, 'dd/MM/yyyy HH:mm')} + ')'"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <hr/>
+        <a href="#" data-th-href="@{/user/ticket/view/{id}/(id=*{id})}" class="btn btn-info">
+            Details
+        </a>
+    </div>
+</div>

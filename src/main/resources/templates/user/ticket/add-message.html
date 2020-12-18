@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorator="layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>HelpDesk.com - Open New Support Ticket</title>
+</head>
+<body>
+
+<div data-layout-fragment="breadcrumbs">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/user/tickets">My Support Tickets</a></li>
+        <li class="breadcrumb-item"> <a href="#" data-th-href="@{/user/ticket/view/{id}/(id=${object.id})}" data-th-text="${object.title}"></a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Message</li>
+    </ol>
+</div>
+
+<div data-layout-fragment="main-panel">
+    <div class="content">
+        <div class="card">
+            <div class="card-header p-b-0">
+                <h5 class="card-title">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <i class="fa fa-ticket" aria-hidden="true"></i>
+                    Send New Message
+                </h5>
+            </div>
+            <div class="card-block">
+                <form th:action="@{/user/ticket/add-message/{id}/(id=${object.id})}" method="post" data-th-object="${formData}">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="8" th:field="*{content}" id="content" name="content" placeholder="Your message goes here..." required="true"></textarea>
+                    </div>
+                    <hr/>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

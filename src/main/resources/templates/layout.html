@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<!-- Template by Quackit.com -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>HelpDesk.com</title>
+
+    <!-- Bootstrap 4 CSS. This is for the alpha 3 release of Bootstrap 4. This should be updated when Bootstrap 4 is officially released. -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css"
+          integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous"/>
+
+    <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
+    <link href="/static/css/custom.css" rel="stylesheet"/>
+
+    <!-- For icons -->
+    <link href="/static/css/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+<!-- Navigation -->
+<nav id="topNav" class="navbar navbar-full navbar-static-top navbar-dark bg-inverse m-b-1">
+    <button class="navbar-toggler hidden-md-up pull-right" type="button" data-toggle="collapse" data-target="#navbar">
+        &#9776;
+    </button>
+    <a class="navbar-brand" href="/">HelpDesk.com</a>
+    <div class="collapse navbar-toggleable-sm" id="navbar">
+        <ul class="nav navbar-nav">
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/home' ? 'active':''}">
+                <a class="nav-link" href="/home">Home</a>
+            </li>
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/about' ? 'active':''}">
+                <a class="nav-link" href="/about">About</a>
+            </li>
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/article/list' ? 'active':''}">
+                <a class="nav-link" href="/article/list">Help Articles</a>
+            </li>
+            <li class="nav-item dropdown" data-sec-authorize="isAuthenticated()">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-plus"></i> New
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" data-sec-authorize="hasRole('ROLE_USER')" href="/user/ticket/create">+Support Ticket</a>
+                    <a class="dropdown-item" data-sec-authorize="hasRole('ROLE_HELPDESK')" href="/article/create">+Help Article</a>
+                </div>
+            </li>
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/user/tickets' ? 'active':''}">
+                <a class="nav-link" data-sec-authorize="hasRole('ROLE_USER')" href="/user/tickets"><i
+                        class="fa fa-life-ring"></i> My Support Tickets</a>
+            </li>
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/admin/tickets' ? 'active':''}">
+                <a class="nav-link" data-sec-authorize="hasRole('ROLE_HELPDESK')" href="/admin/tickets"><i
+                        class="fa fa-ticket"></i> Manage Support Tickets</a>
+            </li>
+            <li class="nav-item" th:classappend="${#httpServletRequest.getRequestURI() == '/user/account' ? 'active':''}">
+                <a class="nav-link" data-sec-authorize="isAuthenticated()" href="/user/account"><i
+                        class="fa fa-user"></i> My Account</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-sec-authorize="isAuthenticated()" href="/logout">Log Out (<span
+                        data-sec-authentication="name">Bob</span>)</a>
+            </li>
+        </ul>
+        <!-- Search -->
+        <form method="get" action="/article/search" class="form-inline pull-xs-right">
+            <input class="form-control" id="query" name="query" type="text" placeholder="Search Help By Title"/>
+            <button class="btn btn-secondary" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container-fluid">
+
+    <!-- Left Column -->
+    <section layout:fragment="left-column">
+        <div class="col-sm-3">
+
+            <!-- List-Group Panel -->
+            <section layout:fragment="left-panel">
+                <!-- Text Panel -->
+                <div class="card">
+                    <div class="card-header p-b-0">
+                        <h5 class="card-title">
+                            <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                            Top Help Articles
+                        </h5>
+                    </div>
+                    <div class="card-block">
+                        <div class="card-text" data-th-each="entity: ${topUpdatedArticles}" data-th-object="${entity}">
+                            <h6><a href="#" data-th-href="@{/article/view/{id}/(id=*{id})}"
+                                   data-th-text="*{#strings.abbreviate(title,60)}"></a></h6>
+                            <p class="text-muted"
+                               data-th-text="'(last update) ' + *{#temporals.format(lastModifiedDate, 'dd/MM/yyyy HH:mm')}"></p>
+                            <hr/>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header p-b-0">
+                        <h5 class="card-title"><i class="fa fa-fire" aria-hidden="true"></i> Popular Tags</h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action">Super Device</a>
+                        <a href="#" class="list-group-item list-group-item-action">Power</a>
+                        <a href="#" class="list-group-item list-group-item-action">Dead</a>
+                        <a href="#" class="list-group-item list-group-item-action">Buzzing</a>
+                        <a href="#" class="list-group-item list-group-item-action">Noise</a>
+                    </div>
+                </div>
+            </section>
+            <!-- Text Panel -->
+            <div class="card">
+                <div class="card-header p-b-0">
+                    <h5 class="card-title"><i class="fa fa-briefcase" aria-hidden="true"></i> Join Our Team</h5>
+                </div>
+
+                <div class="card-block">
+                    <p class="card-text">Objectively innovate empowered manufactured products whereas parallel
+                        platforms.
+                        Holisticly predominate extensible testing procedures for reliable supply chains. Dramatically
+                        engage
+                        top-line web services vis-a-vis cutting-edge deliverables.</p>
+                    <p>
+                        <button class="btn btn-secondary">Engage</button>
+                    </p>
+                </div>
+            </div>
+        </div><!-- /Left Column -->
+    </section>
+
+    <!-- Center Column -->
+    <section layout:fragment="center-column">
+        <div class="col-sm-6">
+
+            <div layout:fragment="breadcrumbs">
+            </div>
+            <!-- Alert -->
+            <div class="alert alert-warning alert-dismissible" role="alert" layout:fragment="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <strong>WIP version! </strong> This page is Work In Progress (TM). As such, bugs are to be expected.
+            </div>
+
+            <section layout:fragment="main-panel">
+                <!-- Articles -->
+
+                <div class="row">
+                    <article class="col-xs-12">
+                        <h2>Premier Niche Markets</h2>
+                        <p>Phosfluorescently engage worldwide methodologies with web-enabled technology. Interactively
+                            coordinate proactive e-commerce via process-centric "outside the box" thinking. Completely
+                            pursue
+                            scalable customer service through sustainable potentialities.</p>
+                        <p>
+                            <button class="btn btn-outline-success">Read More</button>
+                        </p>
+                        <p class="pull-right"><span class="tag tag-default">keyword</span> <span
+                                class="tag tag-default">tag</span> <span class="tag tag-default">post</span></p>
+                        <ul class="list-inline">
+                            <li class="list-inline-item"><a href="#">Today</a></li>
+                            <li class="list-inline-item"><a href="#"><span class="glyphicon glyphicon-comment"></span> 2
+                                Comments</a></li>
+                            <li class="list-inline-item"><a href="#"><span class="glyphicon glyphicon-share"></span> 8
+                                Shares</a></li>
+                        </ul>
+                    </article>
+                </div>
+                <hr/>
+                <div class="row">
+                    <article class="col-xs-12">
+                        <h2>Proactively Envisioned</h2>
+                        <p>Seamlessly visualize quality intellectual capital without superior collaboration and
+                            idea-sharing.
+                            Holistically pontificate installed base portals after maintainable products. Proactively
+                            envisioned
+                            multimedia based expertise and cross-media growth strategies.</p>
+                        <p>
+                            <button class="btn btn-outline-primary">Read More</button>
+                        </p>
+                        <p class="pull-right"><span class="tag tag-default">keyword</span> <span
+                                class="tag tag-default">tag</span> <span class="tag tag-default">post</span></p>
+                        <ul class="list-inline">
+                            <li class="list-inline-item"><a href="#">Yesterday</a></li>
+                            <li class="list-inline-item"><a href="#"><span class="glyphicon glyphicon-comment"></span>
+                                21
+                                Comments</a></li>
+                            <li class="list-inline-item"><a href="#"><span class="glyphicon glyphicon-share"></span> 36
+                                Shares</a></li>
+                        </ul>
+                    </article>
+                </div>
+                <hr/>
+                <div class="row">
+                    <article class="col-xs-12">
+                        <h2>Completely Synergize</h2>
+                        <p>Completely synergize resource taxing relationships via premier niche markets. Professionally
+                            cultivate one-to-one customer service with robust ideas. Dynamically innovate
+                            resource-leveling
+                            customer service for state of the art customer service.</p>
+                        <p>
+                            <button class="btn btn-outline-danger">Read More</button>
+                        </p>
+                        <p class="pull-right"><span class="tag tag-default">keyword</span> <span
+                                class="tag tag-default">tag</span> <span class="tag tag-default">post</span></p>
+                        <ul class="list-inline">
+                            <li class="list-inline-item"><a href="#">2 Days Ago</a></li>
+                            <li class="list-inline-item"><a href="#"><span class="glyphicon glyphicon-comment"></span>
+                                12
+                                Comments</a></li>
+                            <li class="list-inline-item"><a href="#"><span class="glyphicon glyphicon-share"></span> 18
+                                Shares</a></li>
+                        </ul>
+                    </article>
+                </div>
+                <hr/>
+            </section>
+        </div>
+    </section>
+    <!-- /Center Column-->
+
+    <section layout:fragment="right-column">
+        <!-- Right Column -->
+        <div class="col-sm-3">
+
+            <!-- LogIn Form -->
+            <div class="card" data-sec-authorize="!isAuthenticated()">
+                <div class="card-header p-b-0">
+                    <h5 class="card-title">
+                        <i class="fa fa-sign-in" aria-hidden="true"></i>
+                        Log In
+                    </h5>
+                </div>
+                <div class="card-block">
+                    <form th:action="@{/login}" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="username" name="username" required="true"
+                                   placeholder="Username"/>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="password" name="password" required="true"
+                                   placeholder="Password"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Log In</button>
+                        <a href="/signup" class="btn btn-success">
+                            Sign-Up
+                        </a>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Progress Bars -->
+            <section layout:fragment="right-panel">
+                <div class="card">
+                    <div class="card-header p-b-0">
+                        <h5 class="card-title">
+                            <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                            Statistics
+                        </h5>
+                    </div>
+                    <div class="card-block" data-th-object="${statistics}" data-th-with="totalTickets=*{closedTickets + openTickets + newTickets}">
+                        <div class="text-xs-center" id="progress-caption-1">Resolved Support Tickets &hellip;</div>
+                        <progress class="progress progress-success" data-th-value="*{closedTickets}" data-th-max="${totalTickets}"
+                                  aria-describedby="progress-caption-1"></progress>
+                        <div class="text-xs-center" id="progress-caption-2">New Support Tickets &hellip;</div>
+                        <progress class="progress progress-info" data-th-value="*{newTickets}" data-th-max="${totalTickets}"
+                                  aria-describedby="progress-caption-2"></progress>
+                        <div class="text-xs-center" id="progress-caption-3">Open Support Tickets &hellip;</div>
+                        <progress class="progress progress-warning" data-th-value="*{openTickets}" data-th-max="${totalTickets}"
+                                  aria-describedby="progress-caption-3"></progress>
+                    </div>
+                </div>
+
+
+            </section>
+
+        </div><!--/Right Column -->
+    </section>
+</div><!--/container-fluid-->
+
+<footer>
+    <div layout:fragment="footer" class="footer-blurb">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 footer-blurb-item">
+                    <h3><i class="fa fa-text-height" aria-hidden="true"></i> Dynamic</h3>
+                    <p>Collaboratively administrate empowered markets via plug-and-play networks. Dynamically
+                        procrastinate B2C users after installed base benefits. Dramatically visualize customer directed
+                        convergence without revolutionary ROI.</p>
+                    <p><a class="btn btn-primary" href="#">Procrastinate</a></p>
+                </div>
+                <div class="col-sm-3 footer-blurb-item">
+                    <h3><i class="fa fa-wrench" aria-hidden="true"></i> Efficient</h3>
+                    <p>Dramatically maintain clicks-and-mortar solutions without functional solutions. Efficiently
+                        unleash cross-media information without cross-media value. Quickly maximize timely deliverables
+                        for real-time schemas. </p>
+                    <p><a class="btn btn-success" href="#">Unleash</a></p>
+                </div>
+                <div class="col-sm-3 footer-blurb-item">
+                    <h3><i class="fa fa-paperclip" aria-hidden="true"></i> Complete</h3>
+                    <p>Professionally cultivate one-to-one customer service with robust ideas. Completely synergize
+                        resource taxing relationships via premier niche markets. Dynamically innovate resource-leveling
+                        customer service for state of the art customer service.</p>
+                    <p><a class="btn btn-primary" href="#">Complete</a></p>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+
+    <div class="small-print">
+        <div class="container">
+            <p><a href="#">Terms &amp; Conditions</a> | <a href="#">Privacy Policy</a> | <a href="/about">Contact</a>
+            </p>
+            <p>Copyright &copy; $hitty Admins 2018 </p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"
+        integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY"
+        crossorigin="anonymous"></script>
+
+<!-- Tether -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js"
+        integrity="sha384-Plbmg8JY28KFelvJVai01l8WyZzrYWG825m+cZ0eDDS1f7d/js6ikvy1+X+guPIB"
+        crossorigin="anonymous"></script>
+
+<!-- Bootstrap 4 JavaScript. This is for the alpha 3 release of Bootstrap 4. This should be updated when Bootstrap 4 is officially released. -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js"
+        integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD"
+        crossorigin="anonymous"></script>
+
+<!-- Initialize Bootstrap functionality -->
+<script>
+    // Initialize tooltip component
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    // Initialize popover component
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+</script>
+
+<!-- Placeholder Images -->
+<script src="/static/js/holder.min.js"></script>
+
+</body>
+
+</html>

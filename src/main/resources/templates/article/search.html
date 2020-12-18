@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorator="layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>HelpDesk.com - Search Results</title>
+</head>
+<body>
+<!-- Alert -->
+<section data-layout-fragment="main-panel">
+    <!-- Articles -->
+    <div class="row">
+        <h1>Search Results</h1>
+        <div class="float-right">
+            <th-block data-th-include="partials :: size(${entities})"></th-block>
+        </div>
+        <hr/>
+        <div class="card-body">
+            <article class="col-xs-12" data-th-each="entity: ${entities}" data-th-object="${entity}">
+                <th-block data-th-include="/article/partial/single-entry-view">
+                </th-block>
+            </article>
+        </div>
+        <div class="card-footer">
+            <div data-th-include="partials :: pager(${entities})"></div>
+        </div>
+    </div>
+</section>
+<hr/>
+</body>
+</html>
